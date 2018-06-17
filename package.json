@@ -1,0 +1,31 @@
+{
+  "name": "apitool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "bili",
+    "test": "jest",
+    "autotest": "npm test -- --watch",
+    "doc": "markdown-toc -i README.md --maxdepth=2",
+    "beforeDeploy": "git pull && npm run test",
+    "afterDeploy": "git push",
+    "patch":
+      "npm run beforeDeploy && npm version patch && npm publish && npm run afterDeploy",
+    "minor":
+      "npm run beforeDeploy && npm version minor && npm publish && npm run afterDeploy"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^23.1.0",
+    "@types/jest": "^23.0.0",
+    "ts-jest": "^22.4.6",
+    "typescript": "^2.9.1",
+    "bili": "^3.1.2",
+    "rollup-plugin-typescript2": "^0.14.0",
+    "markdown-toc": "^1.2.0"
+  },
+  "keywords": []
+}
