@@ -1,8 +1,5 @@
 # Introduction
 
-Before using this template, you should open `LICENSE.md` and replace `Your Name` with your name.
-At the bottom of this file, there's another `Your Name` to be replaced and the broken link to the license file.
-
 <!-- toc -->
 
 <!-- tocstop -->
@@ -21,4 +18,4 @@ At the bottom of this file, there's another `Your Name` to be replaced and the b
 
 ## Author
 
-Your Name, Released under the [MIT](./blob/master/LICENSE.md) License.
+Eunjae Lee, Released under the [MIT](https://github.com/eunjae-lee/apitool/blob/master/LICENSE.md) License.
