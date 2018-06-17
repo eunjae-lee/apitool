@@ -7,7 +7,7 @@ describe("ApiTool", () => {
   });
 
   it("merges baseUrl", () => {
-    const api = Apitool.extend({ baseURL: "a" });
-    expect(api.config.baseURL).toEqual("a");
+    const api = Apitool.extend({ baseURL: "aa" });
+    expect(api.config.baseURL).toEqual("aa");
   });
 });
