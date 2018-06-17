@@ -1,3 +1,3 @@
-import Apitool from "./apitool";
+import Api from "./api";
 
-export default Apitool;
+export default Api;
