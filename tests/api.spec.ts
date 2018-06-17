@@ -1,24 +1,24 @@
-import Apitool from "../src/index";
+import Api from "../src/index";
 
 describe("ApiTool", () => {
   it("has extend", () => {
-    const api = Apitool.extend({});
+    const api = Api.extend({});
     expect(api).toBeDefined();
   });
 
   it("merges baseUrl", () => {
-    const api = Apitool.extend({ baseURL: "a" });
+    const api = Api.extend({ baseURL: "a" });
     expect(api.config.baseURL).toEqual("a");
   });
 
   it("extends api", () => {
-    const api = Apitool.extend({ baseURL: "a" });
+    const api = Api.extend({ baseURL: "a" });
     const api2 = api.extend({ baseURL: "b" });
     expect(api2.config.baseURL).toEqual("b");
   });
 
   it("has header", () => {
-    const api = Apitool.extend({
+    const api = Api.extend({
       headers: {
         abc: () => "def"
       }
@@ -27,7 +27,7 @@ describe("ApiTool", () => {
   });
 
   it("overrides header", () => {
-    const api = Apitool.extend({
+    const api = Api.extend({
       headers: {
         abc: () => "def"
       }
@@ -38,5 +38,14 @@ describe("ApiTool", () => {
       }
     });
     expect(api2.config.headers["abc"]()).toEqual("ghi");
+  });
+
+  it("gets headers()", () => {
+    const api = Api.extend({
+      headers: {
+        abc: () => "def"
+      }
+    });
+    expect(api.headers()).toEqual({ abc: "def" });
   });
 });
