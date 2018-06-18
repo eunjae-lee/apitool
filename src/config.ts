@@ -11,11 +11,11 @@ type TransformDataFunction = (data: any) => any;
 
 type TransformResponseFunction = (data: any) => any;
 
-type ResponseValidation = (
+export type ResponseValidation = (
   response: any,
   context: ResponseValidationContext,
-  orgResponse?: AxiosResponse
-) => any;
+  orgResponse: AxiosResponse<any>
+) => void;
 
 interface Config {
   baseURL?: string;

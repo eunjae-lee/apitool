@@ -1,4 +1,4 @@
-import Config from "./config";
+import Config, { ResponseValidation } from "./config";
 import mergeConfig from "./config/merge";
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import cloneDeep from "lodash.clonedeep";
@@ -11,6 +11,7 @@ import {
   get as getCancelToken,
   remove as removeCancelToken
 } from "./cancel_token_manager";
+import { asyncForEach } from "./util";
 
 interface ValidationResult {
   type: ResultType;
@@ -84,23 +85,28 @@ class Api {
     (this.config.after || []).forEach(fn => fn());
   }
 
-  executeResponseValidations(
+  async executeResponseValidations(
     response: any,
     orgResponse: AxiosResponse
-  ): ValidationResult {
+  ): Promise<ValidationResult> {
     let type = ResultType.NO_ERROR,
       data;
-    (this.config.responseValidations || []).every(responseValidation => {
-      const responseValidationContext = new ResponseValidationContext();
-      responseValidation(response, responseValidationContext, orgResponse);
-      const result =
-        responseValidationContext.resultType == ResultType.NO_ERROR;
-      if (!result) {
-        type = responseValidationContext.resultType;
-        data = responseValidationContext.resultData;
+
+    const validations = this.config.responseValidations || [];
+    await asyncForEach(
+      validations,
+      async (responseValidation: ResponseValidation) => {
+        if (type != ResultType.NO_ERROR) {
+          return;
+        }
+        const context = new ResponseValidationContext();
+        await responseValidation(response, context, orgResponse);
+        if (context.resultType != ResultType.NO_ERROR) {
+          type = context.resultType;
+          data = context.resultData;
+        }
       }
-      return result;
-    });
+    );
     return { type, data };
   }
 
