@@ -84,12 +84,15 @@ class Api {
     (this.config.after || []).forEach(fn => fn());
   }
 
-  executeResponseValidations(response: AxiosResponse): ValidationResult {
+  executeResponseValidations(
+    response: any,
+    orgResponse: AxiosResponse
+  ): ValidationResult {
     let type = ResultType.NO_ERROR,
       data;
     (this.config.responseValidations || []).every(responseValidation => {
       const responseValidationContext = new ResponseValidationContext();
-      responseValidation(response, responseValidationContext);
+      responseValidation(response, responseValidationContext, orgResponse);
       const result =
         responseValidationContext.resultType == ResultType.NO_ERROR;
       if (!result) {
@@ -125,7 +128,10 @@ class Api {
     retryNum: number
   ): Promise<Response> {
     const transformedResponse = this.transformResponse(response.data);
-    const validationResult = this.executeResponseValidations(response);
+    const validationResult = this.executeResponseValidations(
+      transformedResponse,
+      response
+    );
     const validationResultType = validationResult.type;
     const validationResultData = validationResult.data;
     let result;

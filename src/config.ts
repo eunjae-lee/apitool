@@ -1,4 +1,5 @@
 import ResponseValidationContext from "./response_validation_context";
+import { AxiosResponse } from "axios";
 
 type Header = () => string;
 
@@ -12,7 +13,8 @@ type TransformResponseFunction = (data: any) => any;
 
 type ResponseValidation = (
   response: any,
-  context: ResponseValidationContext
+  context: ResponseValidationContext,
+  orgResponse?: AxiosResponse
 ) => any;
 
 interface Config {
