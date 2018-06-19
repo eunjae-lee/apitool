@@ -93,7 +93,7 @@ The request returns a `result`. It looks like the following:
 }
 ```
 
-So after executing api call, you can do things like this:
+So after executing api call, you can handle error like this:
 
 ```js
 const result = await new Api().get(url);
@@ -104,7 +104,7 @@ if (result.error) {
 }
 ```
 
-With object destructuring,
+Or with object destructuring,
 
 ```js
 const { error, errorType, errorCode, response } = await new Api().get(url);
@@ -132,12 +132,12 @@ const myApi = new Api().extend({
     (data) => decamelizeKeys(data),
   ],
   transformResponse: [
-    (response) => camelizeKeys(data),
+    (response) => camelizeKeys(response),
   ]
 })
 ```
 
-In JavaScript people usually use camelCase and in rails they usually use snake_case. With `transformData` and `transformResponse`, you can do this easily. And unlike `axios`, `transformData` applies to all methods including `get`.
+In JavaScript people usually use camelCase and in rails or in some server-side languages they usually use snake_case. With `transformData` and `transformResponse`, you can convert cases easily. And unlike `axios`, `transformData` applies to all methods including `get`.
 
 `before` and `after` helps you execute things before request and things after request.
 
@@ -159,7 +159,7 @@ const myAuthApi = myApi.extend({
         context.retry();
       } else {
         context.cancelAll();
-        redirectToLogin();
+        sendEventToRedirectToLogin();
       }
     },
     (response, context, orgResponse) => {
@@ -177,16 +177,14 @@ Next, we see `responseValidations`. You can put an array of functions and they m
 
 - `response` : A response object which has been transformed by your `transformResponse`.
 - `context` : A context object with functions to be called when it's not successful.
-  - `error(errorCode?: any)` : It returns an error. It will not execute next responseValidations. However `after` callbacks will be still executed.
-  - `retry(retryNum = 1)` : If you want to retry, call this function. The result of retried request will be returned.
+  - `error(errorCode?: any)` : It returns an error. Once any of `error`, `retry` or `cancelAll` is called, then it will not execute next validation functions. However `after` callbacks will be still executed.
+  - `retry(retryNum = 1)` : If you want to retry, call this function. The result from the retried request will be returned.
   - `cancelAll()` : It cancels all the other ongoing requests. For example, you can call this when user needs to be logged out due to expired token.
 - `orgResponse` : An original axios response object
 
 ```js
 const { error, errorType, errorCode, response, orgResponse } = await myAuthApi.get(path);
 ```
-
-From the example above, `errorType` will be given.
 
 ## `ErrorType` Schema
 
@@ -209,14 +207,14 @@ enum ErrorType {
   EXCEPTION,
 
   // `error()` has been called
-  // `errorCode` will contain the parameter passed at `error(something)`
+  // `errorCode` will contain whatever you passed at `error(whatever)`
   USER_DEFINED_ERROR
 }
 ```
 
 ## Combining configs
 
-You can extend api objects like above, however there's another approach. You can choose according to your preference or situation.
+You can extend api objects like above, however there's another approach. You can combine configs and use it like the following:
 
 ```js
 import { mergeConfigs } from "apitool";
@@ -240,7 +238,7 @@ const result = await api.get(path);
 
 ## Importing things
 
-What you can import from `apitool` is the following:
+All you can import from `apitool` is the following:
 
 ```js
 import Api, { Response, Context, ErrorType, mergeConfigs } from "apitool";
