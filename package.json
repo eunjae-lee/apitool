@@ -16,7 +16,6 @@
     "minor": "npm run beforeDeploy && npm version minor && npm publish && npm run afterDeploy"
   },
   "dependencies": {
-    "@types/axios": "^0.14.0",
     "@types/lodash.clonedeep": "^4.5.3",
     "axios": "^0.18.0",
     "lodash.clonedeep": "^4.5.0"
