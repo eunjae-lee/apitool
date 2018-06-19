@@ -1,8 +1,6 @@
-import Api from "../src/index";
+import Api, { ErrorType, Context } from "../src/index";
 import _nock from "nock";
 import { AxiosResponse } from "axios";
-import ResponseValidationContext from "../src/response_validation_context";
-import ErrorType from "../src/error_type";
 
 const DUMMY_HOST = "http://unknown.com";
 
@@ -93,7 +91,7 @@ describe("Request", () => {
   it("executes `error()` during validating response", async () => {
     const api = new Api({
       responseValidations: [
-        (response: AxiosResponse, context: ResponseValidationContext) => {
+        (response: AxiosResponse, context: Context) => {
           context.error("code1");
         }
       ]
@@ -113,7 +111,7 @@ describe("Request", () => {
   it("executes `retry` during validating response", async () => {
     const api = new Api({
       responseValidations: [
-        (response: AxiosResponse, context: ResponseValidationContext) => {
+        (response: AxiosResponse, context: Context) => {
           context.retry(10);
         }
       ]
@@ -138,7 +136,7 @@ describe("Request", () => {
     const promise1 = api1.request("get", `${DUMMY_HOST}/a`);
     const api2 = new Api({
       responseValidations: [
-        (response: AxiosResponse, context: ResponseValidationContext) => {
+        (response: AxiosResponse, context: Context) => {
           context.cancelAll();
         }
       ]
