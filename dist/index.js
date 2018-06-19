@@ -1,5 +1,7 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var axios = _interopDefault(require('axios'));
@@ -271,4 +273,6 @@ class Api {
     }
 }
 
-module.exports = Api;
+exports.Context = ResponseValidationContext;
+exports.ErrorType = ErrorType$1;
+exports.default = Api;

@@ -229,7 +229,7 @@ class Api {
     return ret!;
   }
 
-  async request<T>(
+  async request<T = any>(
     method: string,
     url: string,
     data?: any
@@ -237,19 +237,19 @@ class Api {
     return await this.requestInternal<T>(method, url, data);
   }
 
-  async get<T>(url: string, data?: any): Promise<Response<T>> {
+  async get<T = any>(url: string, data?: any): Promise<Response<T>> {
     return await this.request<T>("get", url, data);
   }
 
-  async post<T>(url: string, data?: any): Promise<Response<T>> {
+  async post<T = any>(url: string, data?: any): Promise<Response<T>> {
     return await this.request<T>("post", url, data);
   }
 
-  async put<T>(url: string, data?: any): Promise<Response<T>> {
+  async put<T = any>(url: string, data?: any): Promise<Response<T>> {
     return await this.request<T>("put", url, data);
   }
 
-  async delete<T>(url: string, data?: any): Promise<Response<T>> {
+  async delete<T = any>(url: string, data?: any): Promise<Response<T>> {
     return await this.request<T>("delete", url, data);
   }
 }
