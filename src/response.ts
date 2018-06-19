@@ -1,11 +1,11 @@
 import { AxiosResponse } from "axios";
 import ErrorType from "./error_type";
 
-interface Response {
+interface Response<T> {
   error: boolean;
   errorType?: ErrorType;
   errorCode?: any;
-  response?: any;
+  response?: T | undefined;
   orgResponse?: AxiosResponse;
 }
 

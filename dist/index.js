@@ -84,6 +84,12 @@ var ErrorType;
 })(ErrorType || (ErrorType = {}));
 var ErrorType$1 = ErrorType;
 
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+    }
+}
+
 class Api {
     static extend(config) {
         return new Api(config);
@@ -99,7 +105,13 @@ class Api {
             return undefined;
         }
         return Object.keys(this.config.headers).reduce((acc, key) => {
-            acc[key] = this.config.headers[key]();
+            const headerValue = this.config.headers[key];
+            if (headerValue instanceof Function) {
+                acc[key] = headerValue();
+            }
+            else {
+                acc[key] = headerValue;
+            }
             return acc;
         }, {});
     }
@@ -136,17 +148,19 @@ class Api {
     executeAfters() {
         (this.config.after || []).forEach(fn => fn());
     }
-    executeResponseValidations(response, orgResponse) {
+    async executeResponseValidations(response, orgResponse) {
         let type = ResultType.NO_ERROR, data;
-        (this.config.responseValidations || []).every(responseValidation => {
-            const responseValidationContext = new ResponseValidationContext();
-            responseValidation(response, responseValidationContext, orgResponse);
-            const result = responseValidationContext.resultType == ResultType.NO_ERROR;
-            if (!result) {
-                type = responseValidationContext.resultType;
-                data = responseValidationContext.resultData;
+        const validations = this.config.responseValidations || [];
+        await asyncForEach(validations, async (responseValidation) => {
+            if (type != ResultType.NO_ERROR) {
+                return;
             }
-            return result;
+            const context = new ResponseValidationContext();
+            await responseValidation(response, context, orgResponse);
+            if (context.resultType != ResultType.NO_ERROR) {
+                type = context.resultType;
+                data = context.resultData;
+            }
         });
         return { type, data };
     }
@@ -167,7 +181,7 @@ class Api {
     }
     async transformAndValidateResponse(response, method, url, data, retry, retryNum) {
         const transformedResponse = this.transformResponse(response.data);
-        const validationResult = this.executeResponseValidations(transformedResponse, response);
+        const validationResult = await this.executeResponseValidations(transformedResponse, response);
         const validationResultType = validationResult.type;
         const validationResultData = validationResult.data;
         let result;
@@ -242,6 +256,18 @@ class Api {
     }
     async request(method, url, data) {
         return await this.requestInternal(method, url, data);
+    }
+    async get(url, data) {
+        return await this.request("get", url, data);
+    }
+    async post(url, data) {
+        return await this.request("post", url, data);
+    }
+    async put(url, data) {
+        return await this.request("put", url, data);
+    }
+    async delete(url, data) {
+        return await this.request("delete", url, data);
     }
 }
 

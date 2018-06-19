@@ -38,7 +38,12 @@ class Api {
       return undefined;
     }
     return Object.keys(this.config.headers!).reduce((acc: any, key: string) => {
-      acc[key] = this.config.headers![key]();
+      const headerValue = this.config.headers![key];
+      if (headerValue instanceof Function) {
+        acc[key] = headerValue();
+      } else {
+        acc[key] = headerValue;
+      }
       return acc;
     }, {});
   }
@@ -110,7 +115,7 @@ class Api {
     return { type, data };
   }
 
-  handleException(e: any): Response {
+  handleException<T>(e: any): Response<T> {
     if (axios.isCancel(e)) {
       return {
         error: true,
@@ -125,26 +130,32 @@ class Api {
     }
   }
 
-  async transformAndValidateResponse(
+  async transformAndValidateResponse<T>(
     response: AxiosResponse,
     method: string,
     url: string,
     data: any,
     retry: boolean,
     retryNum: number
-  ): Promise<Response> {
+  ): Promise<Response<T>> {
     const transformedResponse = this.transformResponse(response.data);
-    const validationResult = this.executeResponseValidations(
+    const validationResult = await this.executeResponseValidations(
       transformedResponse,
       response
     );
     const validationResultType = validationResult.type;
     const validationResultData = validationResult.data;
-    let result;
+    let result: Response<T>;
     if (validationResultType == ResultType.RETRY) {
       if (!retry || (retry && retryNum > 0)) {
         const num = retry ? retryNum : validationResultData;
-        result = await this.requestInternal(method, url, data, true, num - 1);
+        result = await this.requestInternal<T>(
+          method,
+          url,
+          data,
+          true,
+          num - 1
+        );
       } else {
         result = {
           error: true,
@@ -182,28 +193,28 @@ class Api {
     return result;
   }
 
-  async requestInternal(
+  async requestInternal<T>(
     method: string,
     url: string,
     data: any,
     retry = false,
     retryNum = 0
-  ): Promise<Response> {
+  ): Promise<Response<T>> {
     if (!retry) {
       this.executeBefores();
     }
     const config: AxiosRequestConfig = this.buildAxiosConfig(method, url, data);
     let response: AxiosResponse | undefined = undefined;
-    let ret: Response | undefined = undefined;
+    let ret: Response<T> | undefined = undefined;
     try {
       response = await axios.request(config);
     } catch (e) {
-      ret = this.handleException(e);
+      ret = this.handleException<T>(e);
     } finally {
       removeCancelToken(config.cancelToken);
     }
     if (!ret) {
-      ret = await this.transformAndValidateResponse(
+      ret = await this.transformAndValidateResponse<T>(
         response!,
         method,
         url,
@@ -215,11 +226,31 @@ class Api {
     if (!retry) {
       this.executeAfters();
     }
-    return ret;
+    return ret!;
   }
 
-  async request(method: string, url: string, data?: any): Promise<Response> {
-    return await this.requestInternal(method, url, data);
+  async request<T>(
+    method: string,
+    url: string,
+    data?: any
+  ): Promise<Response<T>> {
+    return await this.requestInternal<T>(method, url, data);
+  }
+
+  async get<T>(url: string, data?: any): Promise<Response<T>> {
+    return await this.request<T>("get", url, data);
+  }
+
+  async post<T>(url: string, data?: any): Promise<Response<T>> {
+    return await this.request<T>("post", url, data);
+  }
+
+  async put<T>(url: string, data?: any): Promise<Response<T>> {
+    return await this.request<T>("put", url, data);
+  }
+
+  async delete<T>(url: string, data?: any): Promise<Response<T>> {
+    return await this.request<T>("delete", url, data);
   }
 }
 
