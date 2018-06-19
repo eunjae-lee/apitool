@@ -1,3 +1,5 @@
+<p align="center"><img width="256" src="https://raw.githubusercontent.com/eunjae-lee/apitool/master/logo.png"></p>
+
 # Introduction
 
 `apitool` is a wrapper of `axios`. It provides an organized way to work with APIs.
@@ -8,15 +10,15 @@ This goes smoothly with your TypeScript-based project since it's written in Type
 
 - [Install](#install)
 - [Getting Started](#getting-started)
-  * [Performing a simple `GET` request](#performing-a-simple-get-request)
-  * [Performing a simple `POST` request](#performing-a-simple-post-request)
-  * [`result` Schema](#result-schema)
+  - [Performing a simple `GET` request](#performing-a-simple-get-request)
+  - [Performing a simple `POST` request](#performing-a-simple-post-request)
+  - [`result` Schema](#result-schema)
 - [An example](#an-example)
-  * [`ErrorType` Schema](#errortype-schema)
-  * [Combining configs](#combining-configs)
-  * [Importing things](#importing-things)
-  * [Contributing](#contributing)
-  * [Author](#author)
+  - [`ErrorType` Schema](#errortype-schema)
+  - [Combining configs](#combining-configs)
+  - [Importing things](#importing-things)
+  - [Contributing](#contributing)
+  - [Author](#author)
 
 <!-- tocstop -->
 

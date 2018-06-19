@@ -27,6 +27,11 @@ function merge(src, dest) {
         responseValidations: mergeArray(src.responseValidations, dest.responseValidations)
     };
 }
+function mergeConfigs(...configs) {
+    return configs.reduce((acc, config) => {
+        return merge(acc, config);
+    }, {});
+}
 
 const cancelToken = axios.CancelToken;
 let sources = [];
@@ -104,9 +109,6 @@ async function asyncForEach(array, callback) {
 }
 
 class Api {
-    static extend(config) {
-        return new Api(config);
-    }
     constructor(config) {
         this.config = config || {};
     }
@@ -287,4 +289,5 @@ class Api {
 
 exports.Context = ResponseValidationContext;
 exports.ErrorType = ErrorType$1;
+exports.mergeConfigs = mergeConfigs;
 exports.default = Api;
