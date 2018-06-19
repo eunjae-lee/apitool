@@ -6,6 +6,8 @@
 
 This goes smoothly with your TypeScript-based project since it's written in TypeScript.
 
+# Table of contents
+
 <!-- toc -->
 
 - [Install](#install)
@@ -113,7 +115,7 @@ if (error) {
 }
 ```
 
-# An example
+# Getting deeper
 
 So far it doesn't seem to be different from `axios`. Here's an real life example to help you understand what `apitool` really exists for.
 
