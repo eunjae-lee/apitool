@@ -21,10 +21,6 @@ interface ValidationResult {
 class Api {
   config: Config;
 
-  static extend(config: Config) {
-    return new Api(config);
-  }
-
   constructor(config?: Config) {
     this.config = config || {};
   }

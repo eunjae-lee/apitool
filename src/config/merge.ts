@@ -32,4 +32,10 @@ function merge(src: Config, dest: Config): Config {
   };
 }
 
+export function mergeConfigs(...configs: Array<Config>) {
+  return configs.reduce((acc: Config, config: Config) => {
+    return merge(acc, config);
+  }, {});
+}
+
 export default merge;

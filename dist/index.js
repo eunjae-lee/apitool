@@ -149,6 +149,7 @@ class Api {
         return {
             url,
             method,
+            headers: this.headers(),
             baseURL: this.config.baseURL,
             params: method == "get" ? transformedData : undefined,
             data: method != "get" ? transformedData : undefined,

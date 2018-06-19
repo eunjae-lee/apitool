@@ -1,33 +1,33 @@
 import Api from "../src/index";
 
-describe("ApiTool", () => {
+describe("Api", () => {
   it("has extend", () => {
-    const api = Api.extend({});
+    const api = new Api();
     expect(api).toBeDefined();
   });
 
   it("merges baseUrl", () => {
-    const api = Api.extend({ baseURL: "a" });
+    const api = new Api({ baseURL: "a" });
     expect(api.config.baseURL).toEqual("a");
   });
 
   it("extends api", () => {
-    const api = Api.extend({ baseURL: "a" });
+    const api = new Api({ baseURL: "a" });
     const api2 = api.extend({ baseURL: "b" });
     expect(api2.config.baseURL).toEqual("b");
   });
 
   it("has header", () => {
-    const api = Api.extend({
+    const api = new Api({
       headers: {
         abc: () => "def"
       }
     });
-    expect(api.config.headers["abc"]()).toEqual("def");
+    expect((api.config.headers["abc"] as Function)()).toEqual("def");
   });
 
   it("overrides header", () => {
-    const api = Api.extend({
+    const api = new Api({
       headers: {
         abc: () => "def"
       }
@@ -37,11 +37,11 @@ describe("ApiTool", () => {
         abc: () => "ghi"
       }
     });
-    expect(api2.config.headers["abc"]()).toEqual("ghi");
+    expect((api2.config.headers["abc"] as Function)()).toEqual("ghi");
   });
 
   it("gets headers()", () => {
-    const api = Api.extend({
+    const api = new Api({
       headers: {
         abc: () => "def"
       }
