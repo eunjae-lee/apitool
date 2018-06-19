@@ -7,13 +7,24 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var axios = _interopDefault(require('axios'));
 var cloneDeep = _interopDefault(require('lodash.clonedeep'));
 
+function mergeArray(arr1, arr2) {
+    return [...(arr1 || []), ...(arr2 || [])];
+}
+function mergeObject(obj1, obj2) {
+    return {
+        ...obj1,
+        ...obj2
+    };
+}
 function merge(src, dest) {
     return {
         baseURL: dest.baseURL || src.baseURL,
-        headers: {
-            ...src.headers,
-            ...dest.headers
-        }
+        headers: mergeObject(src.headers, dest.headers),
+        transformData: mergeArray(src.transformData, dest.transformData),
+        transformResponse: mergeArray(src.transformResponse, dest.transformResponse),
+        before: mergeArray(src.before, dest.before),
+        after: mergeArray(src.after, dest.after),
+        responseValidations: mergeArray(src.responseValidations, dest.responseValidations)
     };
 }
 
