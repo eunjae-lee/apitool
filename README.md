@@ -1,6 +1,7 @@
 <p align="center"><img width="256" src="https://raw.githubusercontent.com/eunjae-lee/apitool/master/logo.png"></p>
 
 [![Build Status](https://travis-ci.org/eunjae-lee/apitool.svg?branch=master)](https://travis-ci.org/eunjae-lee/apitool)
+[![npm version](http://img.shields.io/npm/v/apitool.svg)](https://npmjs.org/package/apitool)
 [![GitHub stars](https://img.shields.io/github/stars/eunjae-lee/apitool.svg)](https://github.com/eunjae-lee/apitool/stargazers)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/eunjae-lee/apitool.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Feunjae-lee%2Fapitool)
 
