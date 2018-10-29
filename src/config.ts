@@ -1,7 +1,7 @@
 import ResponseValidationContext from "./response_validation_context";
 import { AxiosResponse } from "axios";
 
-type HeaderFunction = () => string;
+type HeaderFunction = (method: string) => string;
 
 interface HeaderTree {
   [key: string]: HeaderFunction | string;
