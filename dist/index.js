@@ -115,14 +115,14 @@ class Api {
     extend(config) {
         return new Api(merge(this.config, config));
     }
-    headers() {
+    headers(method) {
         if (!this.config.headers) {
             return undefined;
         }
         return Object.keys(this.config.headers).reduce((acc, key) => {
             const headerValue = this.config.headers[key];
             if (headerValue instanceof Function) {
-                acc[key] = headerValue();
+                acc[key] = headerValue(method);
             }
             else {
                 acc[key] = headerValue;
@@ -151,7 +151,7 @@ class Api {
         return {
             url,
             method,
-            headers: this.headers(),
+            headers: this.headers(method),
             baseURL: this.config.baseURL,
             params: method == "get" ? transformedData : undefined,
             data: method != "get" ? transformedData : undefined,

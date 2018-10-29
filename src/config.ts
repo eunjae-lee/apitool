@@ -1,10 +1,10 @@
 import ResponseValidationContext from "./response_validation_context";
 import { AxiosResponse } from "axios";
 
-type HeaderFunction = (method: string) => string;
+type HeaderFunction = (method: string) => string | undefined;
 
 interface HeaderTree {
-  [key: string]: HeaderFunction | string;
+  [key: string]: HeaderFunction | string | undefined;
 }
 
 type TransformDataFunction = (data: any) => any;
