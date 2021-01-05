@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@types/lodash.clonedeep": "^4.5.3",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
